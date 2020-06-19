@@ -4,18 +4,42 @@ class CatsController < ApplicationController
     render json: cats
   end
 
+  def show
+    cat = Cat.find(params[:id])
+    render json: cat
+  end
+
   def create
     cat = Cat.create(cat_params)
     if cat.valid?
       render json: cat
     else
       render json: cat.errors, status: 422
-    end  
+    end
   end
 
-  private 
+  def update
+    cat = Cat.find(params[:id])
+    cat.update(cat_params)
+    if cat.valid?
+      render json: cat
+    else
+      render json: cat.errors, status: 422
+    end
+  end
+
+  def destroy
+    cat = Cat.find(params[:id])
+    if cat.destroy
+      render json: cat
+    else
+      render json: cat.errors, status: 422
+    end
+  end
+
+  private
   def cat_params
-    params.require(:cat).permit(:name, :age, :enjoys)
+    params.require(:cat).permit(:name, :age, :enjoys, :image_path)
   end
 
 end
